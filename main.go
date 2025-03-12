@@ -1,65 +1,30 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
+	"errors"
 	"log"
-
-	helpers "github.com/JeffrySan/go-packages-helpers/packages"
 )
 
 func main() {
-	myJson := `
-	[
-		{
-			"first_name": "Clark",
-			"last_name": "Clinton",
-			"age": 23,
-			"has_dog": true
-		},
-		{
-			"first_name": "Bruce",
-			"last_name": "Wayne",
-			"age": 33,
-			"has_dog": false
-		}
-	]`
 
-	var personResult []helpers.Person
-
-	error := json.Unmarshal([]byte(myJson), &personResult)
+	result, error := divide(10, 0)
 
 	if error != nil {
-		log.Println("Error on Unmarshalling")
+		log.Println("Error: ", error)
 		return
 	}
 
-	log.Printf("Success Unmarshalled %v", personResult)
+	log.Println("Result: ", result)
+}
 
-	// Marshalling
-	var mySlicePerson []helpers.Person
+func divide(x, y float64) (float64, error) {
 
-	var person1 helpers.Person
-	person1.FirstName = "Bailey"
-	person1.LastName = "Aisyle"
-	person1.Age = 23
-	person1.HasDog = false
+	var result float64
 
-	var person2 helpers.Person
-	person2.FirstName = "Jason"
-	person2.LastName = "Mars"
-	person2.Age = 53
-	person2.HasDog = true
-
-	mySlicePerson = append(mySlicePerson, person1)
-	mySlicePerson = append(mySlicePerson, person2)
-
-	jsonResult, error := json.MarshalIndent(mySlicePerson, "", "   ")
-
-	if error != nil {
-		log.Println("Error Marshalling")
-		return
+	if y == 0 {
+		return result, errors.New("cannot divide by zero")
 	}
 
-	fmt.Printf("Result JSON: %v", string(jsonResult))
+	result = x / y
+	return result, nil
 }
