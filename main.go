@@ -2,15 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
-)
 
-type Person struct {
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Age       int    `json:"age"`
-	HasDog    bool   `json:"has_dog"`
-}
+	helpers "github.com/JeffrySan/go-packages-helpers/packages"
+)
 
 func main() {
 	myJson := `
@@ -29,7 +25,7 @@ func main() {
 		}
 	]`
 
-	var personResult []Person
+	var personResult []helpers.Person
 
 	error := json.Unmarshal([]byte(myJson), &personResult)
 
@@ -39,4 +35,31 @@ func main() {
 	}
 
 	log.Printf("Success Unmarshalled %v", personResult)
+
+	// Marshalling
+	var mySlicePerson []helpers.Person
+
+	var person1 helpers.Person
+	person1.FirstName = "Bailey"
+	person1.LastName = "Aisyle"
+	person1.Age = 23
+	person1.HasDog = false
+
+	var person2 helpers.Person
+	person2.FirstName = "Jason"
+	person2.LastName = "Mars"
+	person2.Age = 53
+	person2.HasDog = true
+
+	mySlicePerson = append(mySlicePerson, person1)
+	mySlicePerson = append(mySlicePerson, person2)
+
+	jsonResult, error := json.MarshalIndent(mySlicePerson, "", "   ")
+
+	if error != nil {
+		log.Println("Error Marshalling")
+		return
+	}
+
+	fmt.Printf("Result JSON: %v", string(jsonResult))
 }
