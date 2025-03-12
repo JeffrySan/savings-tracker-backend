@@ -2,9 +2,11 @@ package helpers
 
 import "math/rand"
 
-type SomeStruct struct {
-	FirstName string
-	LastName  string
+type Person struct {
+	first  string `json: "first"`
+	last   string `json: "last"`
+	Age    int    `json: "age"`
+	HasDog bool   `json: "hasDog"`
 }
 
 func RandomNumber(numberPool int) int {

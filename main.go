@@ -1,29 +1,42 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
-	"time"
-
-	helpers "github.com/JeffrySan/go-packages-helpers/packages"
 )
 
-const numPool = 10
-
-func CalculateValue(intChan chan int) {
-	randomNumber := helpers.RandomNumber(numPool)
-	time.Sleep(4 * time.Second)
-	intChan <- randomNumber
+type Person struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Age       int    `json:"age"`
+	HasDog    bool   `json:"has_dog"`
 }
 
 func main() {
-	intChan := make(chan int)
-	defer close(intChan)
+	myJson := `
+	[
+		{
+			"first_name": "Clark",
+			"last_name": "Clinton",
+			"age": 23,
+			"has_dog": true
+		},
+		{
+			"first_name": "Bruce",
+			"last_name": "Wayne",
+			"age": 33,
+			"has_dog": false
+		}
+	]`
 
-	log.Println("Calculating...")
+	var personResult []Person
 
-	go CalculateValue(intChan)
-	log.Println("Continuing...")
-	num := <-intChan
-	log.Println(num)
-	log.Println("Resulting...")
+	error := json.Unmarshal([]byte(myJson), &personResult)
+
+	if error != nil {
+		log.Println("Error on Unmarshalling")
+		return
+	}
+
+	log.Printf("Success Unmarshalled %v", personResult)
 }
